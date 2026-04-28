@@ -1,0 +1,13 @@
+name = "EllasyExamples"
+uuid = "4611683c-29d3-4b56-8b46-5c2d7abfcc2a"
+authors = ["Stephan Scholz"]
+version = "0.1.0"
+
+[compat]
+julia = "1.12"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
