@@ -1,9 +1,14 @@
 name = "EllasyExamples"
 uuid = "4611683c-29d3-4b56-8b46-5c2d7abfcc2a"
-authors = ["Stephan Scholz"]
 version = "0.1.0"
+authors = ["Stephan Scholz"]
+
+[deps]
+Ellasy = "28e4bf79-3cc1-4874-8158-2349b181455b"
+LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 
 [compat]
+LaTeXStrings = "1.4.0"
 julia = "1.12"
 
 [extras]
