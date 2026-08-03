@@ -11,7 +11,7 @@ tshift = 7c;
 f_in(t,k) = sin(π*k*tanh(t / k))
 # d1_f_in(t,k) = π*cos(k*π*tanh(t/k))*(1-tanh(t/k)^2)
 # d2_f_in(t,k) = -π^2 * sin(k*π*tanh(t/k)) * (1-tanh(t/k)^2)^2 - (2π/k)*cos(k*π*tanh(t/k))*tanh(t/k)*(1-tanh(t/k)^2)
-# u_in(t) = f_in(t-tshift,c)
+u_in(t) = f_in(t-tshift,c)
 
 #=
 function u_in(t)
