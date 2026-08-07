@@ -7,7 +7,6 @@ include("ladder_systems.jl")
 
 # Options
 ladder_type = :RL_con_C # :LC_con_R # :RC_con_L # :RL_con_C;
-signal_type = :in_step;
 
 using Ellasy
 N = 10; # Number of circuits
@@ -20,11 +19,7 @@ tstep = 100.0;
 Tfinal = 3000.0;
 
 u_in(t) = stepsignal(t, tstep, Tfinal/2);
-# u_in2(t) = affinesignal(t, tstep, Tfinal/2)
-# u_in3(t) = quadraticsignal(t, tstep, Tfinal/2)
-
 ode = build_ode_system(ladder, u_in)
-
 
 # Preprocessing
 # Run Simulation
@@ -44,11 +39,10 @@ data_sim, tgrid = simulate_ladder( ode, tspan)
 using CairoMakie, LaTeXStrings
 base_path = "results/"
 
-if ladder_type == :RL_con_C && signal_type == :in_step
+if ladder_type == :RL_con_C
     file_name = "step_shunt_capacitor.pdf"
 
     in_signal = hcat(u_in.(tgrid),zeros(length(tgrid)))
-    in_signal_label = [L"Step $u$"] 
     fig_color = Makie.wong_colors()[1]
 
 
@@ -62,17 +56,12 @@ if ladder_type == :RL_con_C && signal_type == :in_step
 
     figscaling = 1;
 
-elseif ladder_type == :RL_con_C && signal_type == :in_sweep
-    file_name = "sweep_shunt_capacitor.pdf"
-    fig_color = Makie.wong_colors()[1]
 
-
-elseif ladder_type == :LC_con_R && signal_type == :in_step
+elseif ladder_type == :LC_con_R
     file_name = "step_shunt_resistor.pdf"
     fig_color = Makie.wong_colors()[2]
 
     in_signal = hcat(u_in.(tgrid),zeros(length(tgrid)))
-    in_signal_label = [L"Affine $u$", L"Step $\dot{u}$"] 
 
     # Type: Resistor
     figlimits = [(-50, Tfinal+150, -2.2, 2.2), 
@@ -84,16 +73,9 @@ elseif ladder_type == :LC_con_R && signal_type == :in_step
 
     figscaling = 10;
 
-
-elseif ladder_type == :LC_con_R && signal_type == :in_sweep
-    file_name = "sweep_shunt_resistor.pdf"
-    fig_color = Makie.wong_colors()[2]
-
-elseif ladder_type == :RC_con_L && signal_type == :in_step
+elseif ladder_type == :RC_con_L
     file_name = "step_shunt_inductor.pdf"
     fig_color = Makie.wong_colors()[3]
-
-    in_signal_label = [L"Quadratic $u$", L"Step $\ddot{u}$"] 
 
     # Type Shunt = Inductor
     figlimits = [(-50, Tfinal+150, -2.1, 2.1), 
@@ -104,9 +86,6 @@ elseif ladder_type == :RC_con_L && signal_type == :in_step
                 [-0.01,0.005,0.01]]
 
     figscaling = 1000;
-elseif ladder_type == :RC_con_L && signal_type == :in_sweep
-    file_name = "sweep_shunt_inductor.pdf"
-    fig_color = Makie.wong_colors()[3]
 end
 
 path2pdf = base_path*file_name
@@ -135,12 +114,9 @@ begin
         ytickalign = 1, yticksize = 10, xlabelpadding = 0, limits = figlimits[2])
 
 
-    
-
     ax1.xticks = 0 : 500 : Tfinal;
     ax2.xticks = 0 : 500 : Tfinal;
     
-
     if figscaling == 1
         ax1.yticks = figticks[1][1] : figticks[1][2] : figticks[1][3];
         ax2.yticks = figticks[2][1] : figticks[2][2] : figticks[2][3];
@@ -153,7 +129,6 @@ begin
 
     hidexdecorations!(ax1, grid = false, ticks = false)
     # hidexdecorations!(ax2, grid = false, ticks = false)
-
 
     lines!(ax1, tsim, data1;linestyle = :solid, linewidth = 3, label = "n=2", color = fig_color)
     axislegend(ax1, position = :rt, backgroundcolor = (:grey90, 0.1));
@@ -174,7 +149,7 @@ end
 
 
 # Export as PDF
-save(path2pdf, fig1, pt_per_unit = 1)    
+# save(path2pdf, fig1, pt_per_unit = 1)    
 
 
 # Step input

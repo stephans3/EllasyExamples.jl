@@ -15,7 +15,6 @@ R, C, L = Rational.((2, 3, 5))
 # Create ladder model
 ladder = SingleLadder(N,ladder_type, R, C, L) # Shunt is Capacitor
 
-tstep  = 100.0;
 Tfinal = 1800.0;
 c = 100; tshift = 7c;
 

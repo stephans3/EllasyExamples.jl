@@ -1,27 +1,22 @@
+
+include("input_signals.jl")
+
 ts = 0.01; # Sampling time
-Tf = 1800.0;
-tgrid = 0:ts:Tf
-c = 100;
-tshift = 7c;
-f_in(t,k) = sin(π*k*tanh(t / k))
-d1_f_in(t,k) = π*cos(k*π*tanh(t/k))*(1-tanh(t/k)^2)
-d2_f_in(t,k) = -π^2 * sin(k*π*tanh(t/k)) * (1-tanh(t/k)^2)^2 - (2π/k)*cos(k*π*tanh(t/k))*tanh(t/k)*(1-tanh(t/k)^2)
+Tfinal = 1800.0;
+tgrid = 0:ts:Tfinal
+c = 100; tshift = 7c;
 
-#u_in(t) = d2_f_in(t-7c,c) # f_in(t-7c,c)
-
-u_in0(t) = f_in(t-7c,c) # f_in(t-7c,c)
-u_in1(t) = d1_f_in(t-tshift,c) # f_in(t-7c,c)
-u_in2(t) = d2_f_in(t-tshift,c) # f_in(t-7c,c)
+u_in0(t) = symmetric_sweep(t-tshift,c)
+u_in1(t) = symmetric_sweep_der1(t-tshift,c) # f_in(t-7c,c)
+u_in2(t) = symmetric_sweep_der2(t-tshift,c) # f_in(t-7c,c)
 
 u_data = hcat(u_in0.(tgrid), u_in1.(tgrid), u_in2.(tgrid))
-
 
 using CairoMakie
 base_path = "results/"
 
-n_plot = 10;
-
 begin
+    n_plot = 10;
     data1 = u_data[1:n_plot:end,1]
     data2 = u_data[1:n_plot:end,2]
     data3 = u_data[1:n_plot:end,3]
@@ -49,7 +44,7 @@ begin
         yminorgridvisible = true, yminorticksvisible = true, yminortickalign = 1,
         ytickalign = 1, yticksize = 10, xlabelpadding = 0, limits = (-50, 1850, -11, 11))
     
-    ttixx = 0 : 300 : Tf
+    ttixx = 0 : 300 : Tfinal
     ax1.xticks = ttixx;
     ax2.xticks = ttixx;
     ax3.xticks = ttixx;
@@ -71,5 +66,5 @@ begin
 
     #ylabel = Label(fig1[1:3, 0], L"Voltage in [V]", rotation = pi/2)
     fig1
-    save(base_path*"input_signal.pdf", fig1, pt_per_unit = 1)    
+    #save(base_path*"input_signal.pdf", fig1, pt_per_unit = 1)    
 end
