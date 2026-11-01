@@ -16,14 +16,23 @@ lad_vec = SingleLadder(N, circuit, R, C, L)
 fom1 = buildFirstOrderSystem(lad_val)
 fom2 = buildFirstOrderSystem(lad_vec)
 
+fom2[1]
+fom2[2]
+fom2[3]
+
 fom1[1]
 fom1[2]
 fom1[3]
 
 fom1 .≈ fom2
 
-fom1 = buildFOSubmatrices(lad_val)
-fom2 = buildFOSubmatrices(lad_vec)
+fosm1 = buildFOSubmatrices(lad_val)
+fosm2 = buildFOSubmatrices(lad_vec)
+
+fosm2[1]
+fosm2[2]
+
+fosm2[3]
 
 fom1[1]
 fom1[2]
